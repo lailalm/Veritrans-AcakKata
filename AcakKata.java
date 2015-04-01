@@ -1,9 +1,15 @@
 import java.util.*;
 
 public class AcakKata {
-	public static final String BENAR = "BENAR!";
-	public static final String GARIS = "======================== ACAK KATA ===========================";
-	public static final String SALAH = "SALAH! Silahkan coba lagi";
+	public static final String BENAR 	= "BENAR!";
+	public static final String GARIS 	= "======================== ACAK KATA ===========================";
+	public static final String SALAH 	= "SALAH! Silahkan coba lagi";
+	public static final String CHOOSE 	= "Ingin bermain atau menambahkan kata? (MAIN/TAMBAH)";
+	public static final String ASK	 	= "Ingin kembali bermain? (YA/TIDAK)";
+	public static final String TAMBAH	= "TAMBAH";
+	public static final String INPUT	= "Masukkan kata yang ingin Anda tambahkan dalam permainan";
+	public static final String ADD_SUCCESS = "Kata berhasil dimasukkan.";
+	public static final String PLAY_FALSE = "Sayang sekali :(";
 
 	public static ArrayList<String> kumpulan_kata;
 
@@ -12,35 +18,60 @@ public class AcakKata {
 	
 	public static void main (String[] args) {
 		initialize();
-		String input = "";
-
+		String temp = "";
 		Scanner scan = new Scanner(System.in);
-		play = true;
+		
+		while (true) {
+			System.out.println(CHOOSE);
+			String choose = scan.next();
 
-		while (play) {
-			answer = false;
-			String kata = randomize();
-			System.out.println("Tebak kata : " + acak(kata));
+			if (choose.equalsIgnoreCase(TAMBAH)) {
+				System.out.println(INPUT);
+				temp = scan.next();
+				tambahKata(temp);
+			} else {
+				play = true;
 
+				while (play) {
+					answer = false;
+					String kata = randomize();
+					System.out.println();
+					System.out.println("Tebak kata : " + acak(kata));
 
-			while (!answer) {
-				System.out.print("Jawab : ");
-				String jawaban = scan.next();
+					while (!answer) {
+						System.out.print("Jawab : ");
+						String jawaban = scan.next();
 
-				if (jawaban.equalsIgnoreCase(kata)) {
-					answer = true;
-					System.out.println(BENAR);
-					System.out.println(GARIS);
+						if (jawaban.equalsIgnoreCase(kata)) {
+							answer = true;
+							System.out.println(BENAR);
 
-				} else {
-					System.out.println(SALAH);					
+						} else {
+							System.out.println(SALAH);					
+						}
+					}
+
+					System.out.println(ASK);
+					temp = scan.next();
+
+					if (temp.equalsIgnoreCase("YA")) {
+						// do nothing
+					} else {
+						System.out.println(PLAY_FALSE);
+						play = false;
+					}
 				}
 			}
 		}
-		
+
 	}
 
 	public static void initialize() {
+		System.out.println(GARIS);
+
+		play = true;
+		answer = false;
+
 		kumpulan_kata = new ArrayList<String>();
 		kumpulan_kata.add("buku");
 		kumpulan_kata.add("meja");
@@ -62,20 +93,29 @@ public class AcakKata {
 	public static String acak (String kata) {
         Random rn = new Random();
         boolean[] flag = new boolean[kata.length()];
-
 		StringBuffer randStr = new StringBuffer();
 
-        for (int i = 0; i < kata.length(); i++) {
-            int number = rn.nextInt(kata.length());
+		String kata_acak = kata;
 
-            while (flag[number]) {
-	            number = rn.nextInt(kata.length());
-            }
-            flag[number] = true;
+		while(kata_acak.equalsIgnoreCase(kata)) {
+			for (int i = 0; i < kata.length(); i++) {
+	            int number = rn.nextInt(kata.length());
 
-            char ch = kata.charAt(number);
-            randStr.append(ch);
-        }
-		return randStr.toString();
+	            while (flag[number]) {
+		            number = rn.nextInt(kata.length());
+	            }
+	            flag[number] = true;
+
+	            char ch = kata.charAt(number);
+	            randStr.append(ch);
+	        }
+	        kata_acak = randStr.toString();
+		}
+		return kata_acak;
+	}
+
+	public static void tambahKata(String str) {
+		kumpulan_kata.add(str);
+		System.out.println(ADD_SUCCESS);
 	}
 }
