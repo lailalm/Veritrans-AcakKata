@@ -3,7 +3,7 @@ For internship test purpose
 
 # How to run
 run this command on your terminal: 
-  javac AcakKata.java
-  java AcakKata
+<br>javac AcakKata.java
+<br>java AcakKata
 
 then, play :D
